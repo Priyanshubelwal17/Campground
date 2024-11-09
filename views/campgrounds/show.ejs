@@ -7,6 +7,12 @@
         <h2>
             <%=campground.location%>
         </h2>
+        <img src="<%= campground.image %>" class="img-fluid rounded"
+            style="width: 300px; height: 300px; object-fit: cover;" alt="Campground Image">
+
+        <p>
+            <%=campground.description%>
+        </p>
         <p>
             <a href="/campgrounds/<%=campground._id%>/edit">Edit</a>
         </p>
