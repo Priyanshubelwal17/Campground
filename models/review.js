@@ -8,10 +8,6 @@ const reviewSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
-<<<<<<< HEAD
 });
-=======
-})
->>>>>>> f489baeb5bf276d55accee7d20a45336a177d8a5
 
 module.exports = mongoose.model("Review", reviewSchema);
