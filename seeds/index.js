@@ -27,6 +27,9 @@ const seedDB = async () => {
             image: `https://picsum.photos/400?random=0.8488659029878216`,
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.Repudiandae odio error doloremque vitae.Ducimus iste, iure maxime accusantium ipsum culpa amet? Aspernatur eos totam officiis nihil eum non, omnis consectetur.',
             price,
+            geometry:{type: "Point",
+                coordinates:[-113.1331,47.0202]
+                },
             images: [
                 {
                     url: 'https://res.cloudinary.com/da0mdmqzz/image/upload/v1736355197/YelpCamp/c9bh9yiemtfjq2krzp1h.jpg',
