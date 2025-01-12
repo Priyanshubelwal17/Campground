@@ -28,7 +28,10 @@ const seedDB = async () => {
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.Repudiandae odio error doloremque vitae.Ducimus iste, iure maxime accusantium ipsum culpa amet? Aspernatur eos totam officiis nihil eum non, omnis consectetur.',
             price,
             geometry:{type: "Point",
-                coordinates:[-113.1331,47.0202]
+                coordinates:[
+                    cities[random1000].longitude,
+                    cities[random1000].latitude,
+                ]
                 },
             images: [
                 {
@@ -48,3 +51,4 @@ const seedDB = async () => {
 seedDB().then(() => {
     mongoose.connection.close();
 })
+
