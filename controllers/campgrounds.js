@@ -1,9 +1,7 @@
 const Campground = require('../models/campground');
-
-const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-const mapboxToken = process.env.MAPBOX_TOKEN;
-const geocoder = mbxGeocoding({ accessToken: mapboxToken });
-const {cloudinary} = require('../cloudinary');
+const maptilerClient = require("@maptiler/client");
+maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
+const { cloudinary } = require('../cloudinary');
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
@@ -15,28 +13,17 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createCampground = async (req, res, next) => {
-    try{
- const geoData = await geocoder.forwardGeocode({
-        query: req.body.campground.location,
-        limit: 1
-    }).send()
-    if(geoData.body.features.length){
-        req.flash('error','Invalid location,please try again')
-        return res.redirect('/campgrounds/new')
-    }
+
+    const geoData = await maptilerClient.geocoding.forward(req.body.campground.location, { limit: 1 });
     const campground = new Campground(req.body.campground);
-    campground.geometry = geoData.body.features[0].geometry;
+    campground.geometry = geoData.features[0].geometry;
     campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     campground.author = req.user._id;
     await campground.save();
     console.log(campground);
     req.flash('success', 'Successfully made a new campground!');
     res.redirect(`/campgrounds/${campground._id}`)
-  } catch(error){
-    console.error('Error creating campground',error)
-    req.flash('error','Something went wrong,please try again later')
-    res.redirect('/campgrounds/ew')
-  }
+
 }
 
 
@@ -68,14 +55,16 @@ module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
     console.log(req.body)
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const geoData = await maptilerClient.geocoding.forward(req.body.campground.location, { limit: 1 });
+    campground.geometry = geoData.features[0].geometry;
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
     campground.images.push(...imgs)
     await campground.save()
-    if(req.body.deleteImages){
-        for(let filename of req.body.deleteImages){
-           await cloudinary.uploader.destroy(filename)
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename)
         }
-        await campground.updateOne({$pull: {images:{filename: {$in: req.body.deleteImages}}}})
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
     }
     req.flash('success', 'Successfully updated campground!');
     res.redirect(`/campgrounds/${campground._id}`)
