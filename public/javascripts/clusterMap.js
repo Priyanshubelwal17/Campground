@@ -7,6 +7,8 @@ const map = new maptilersdk.Map({
     zoom: 3
 });
 
+
+
 map.on('load', function () {
     map.addSource('campgrounds', {
         type: 'geojson',
