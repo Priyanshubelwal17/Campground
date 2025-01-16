@@ -1,4 +1,4 @@
-maptilersdk.config.apiKey = maptilerApiKey
+maptilersdk.config.apiKey = "<%= process.env.MAPTILER_KEY %>"
 
 const map = new maptilersdk.Map({
     container: 'cluster-map',
