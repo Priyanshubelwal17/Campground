@@ -118,7 +118,6 @@ app.use(
                 "blob:",
                 "data:",
                 "https://res.cloudinary.com/da0mdmqzz/", // make sure to replace the value correctly here!
-                "https://res.cloudinary.com/douqbebwk/",
                 "https://images.unsplash.com/",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
